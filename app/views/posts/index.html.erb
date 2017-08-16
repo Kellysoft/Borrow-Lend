@@ -1,0 +1,124 @@
+<%= content_for :middle do %>
+<h1>Welcome, <%= @user.first_name%>!</h1>
+
+
+Welcome
+<p><%= @user.first_name%> <%= @user.first_name%></p>
+<% if flash[:errors] %>
+	<% flash[:errors].each do |e| %>
+		<p><%= e %></p>
+	<% end %>
+<% end %>
+<form action="/posts" method="post">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  <p>New Post:</p>
+  <textarea name="post[post]" id="Content" rows="3" cols="80"></textarea>
+  <input type="submit" name="Create Secret" value="Create Post">
+</form>
+<table>
+  <h2>The Posts Table</h2>
+  <thead>
+    <tr>
+      <td style="width: 200px;font-weight: bold;font-size: 20px;">Author</td>
+      <td style="width: 200px;font-weight: bold;font-size: 20px;">Post</td>
+    </tr>
+  </thead>
+  <tbody>
+  <% @posts.reverse.each do |post| %>
+      <tr>
+        <% if post.postable_type == "Lender"%>
+        <td style="width: 600px;color: green"><%= post.postable.first_name %> <%= post.postable.last_name %></td>
+        <td style="width: 600px;color: green"><%= post.post %></td>
+        <% else %>
+        <td style="width: 600px;color: red"><%= post.postable.first_name %> <%= post.postable.last_name %></td>
+        <td style="width: 600px;color: red"><%= post.post %></td>
+        <% end %>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+<table>
+  <h2>The Borrowers Table</h2>
+  <thead>
+    <tr>
+      <td style="width: 200px;">Name</td>
+      <td style="width: 200px;">Money Needed For</td>
+      <td style="width: 200px;">Description</td>
+      <td style="width: 200px;">Amount Needed</td>
+      <td style="width: 200px;">Amount Raised</td>
+      <td style="width: 200px;">Action/Status</td>
+    </tr>
+  </thead>
+  <tbody>
+  <% @borrowers.each do |borrower| %>
+      <tr>
+        <td style="width: 200px;"><%= borrower.first_name %> <%= borrower.last_name %></td>
+        <td style="width: 200px;"><%= borrower.loan_reason %></td>
+        <td style="width: 200px;"><%= borrower.loan_description %></td>
+        <td style="width: 200px;"><%= borrower.ammount_needed %></td>
+        <td style="width: 200px;"><%= borrower.ammount_raised %></td>
+        <td style="width: 200px;">
+          <form action="/loans/<%= borrower.id %>" method="post">
+            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+            <input type="hidden" name="loan[borrower_id]" value="<%= borrower.id %>">
+            <input type="number" name="loan[amount]" id="Loan_Amount"  style="width: 100px;">
+            <input type="submit" name="Lend" value="Lend">
+          </form>
+        </td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<table>
+  <h2>The Lenders Table</h2>
+  <thead>
+    <tr>
+      <td style="width: 200px;">Lender Name</td>
+      <td style="width: 200px;">Lender ID</td>
+    </tr>
+  </thead>
+  <tbody>
+  <% @lenders.each do |lender| %>
+      <tr>
+        <td style="width: 200px;"><%= lender.first_name %> <%= lender.last_name %></td>
+        <td style="width: 200px;"><%= lender.id%></td>
+        </td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<table>
+  <h2>The Loans Table</h2>
+  <thead>
+    <tr>
+      <td style="width: 200px;">Loan Amount</td>
+      <td style="width: 200px;">Lender ID</td>
+      <td style="width: 200px;">Borrower ID</td>
+    </tr>
+  </thead>
+  <tbody>
+  <% @loans.each do |loan| %>
+      <tr>
+        <td style="width: 200px;"><%= loan.amount %> </td>
+        <td style="width: 200px;"><%= loan.lender_id %> </td>
+        <td style="width: 200px;"><%= loan.lender.first_name%></td>
+        <td style="width: 200px;"><%= loan.borrower_id%></td>
+        <td style="width: 200px;"><%= loan.borrower.first_name%></td>
+
+        </td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<% end %>
